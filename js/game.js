@@ -39,8 +39,9 @@ var game = {
 
 	// Run on game resources loaded.
 	"loaded" : function () {
+		// This entity pool is used to load players and enemies into the game.
 		me.pool.register("player", game.PlayerEntity, true);
-		
+		// The menu states are used to load different screens in the game.
 		me.state.set(me.state.MENU, new game.TitleScreen());
 		me.state.set(me.state.PLAY, new game.PlayScreen());
 
