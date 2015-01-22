@@ -12,7 +12,7 @@ game.PlayerEntity = me.Entity.extend({
         	}
         }]);
     // Used for movement, this line sets the velocity in which the palyer moves across the map.
-    this.body.setVelocity(5, 0);
+    this.body.setVelocity(5, 20);
     
 
     },
