@@ -13,10 +13,10 @@ game.PlayerEntity = me.Entity.extend({
         }]);
     // Used for movement, this line sets the velocity in which the palyer moves across the map.
     this.body.setVelocity(5, 20);
-
+    // These two lines add aniamtions for the Orc player from the spritesheet he is given in the data file. The numbers represent the different sprites used to imitate a walking animation.
     this.renderable.addAnimation("idle", [78]);
     this.renderable.addAnimation("walk", [117, 118, 119, 120, 121, 123, 124, 125], 80);
-
+    // This action sets the current animation to "idle" when the player is NOT moving.
     this.renderable.setCurrentAnimation("idle");
     
 
@@ -33,7 +33,7 @@ game.PlayerEntity = me.Entity.extend({
        } else {
        	this.body.vel.x = 0;
        }
-       
+       // These if and else statements declare when to use the "walk" and "idle" animations when the character is either moving or not.
        if(this.body.vel.x !== 0) {
        if(!this.renderable.isCurrentAnimation("walk")) {
        	   this.renderable.setCurrentAnimation("walk");
