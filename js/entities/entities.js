@@ -48,8 +48,10 @@ game.PlayerEntity = me.Entity.extend({
     }
 });
 
+// These two globs of text contain the data of the two towers in the game, for player and the enemy.
 game.PlayerBaseEntity = me.Entity.extend({
      init: function(x, y, settings) {
+     	// These variabls state the height and width of the sprite.
        this._super(me.Entity, 'init', [x, y, {
               image: "tower",
               width: 100,
@@ -60,6 +62,7 @@ game.PlayerBaseEntity = me.Entity.extend({
               	return (new me.Rect(0, 0, 100, 100)).toPolygon();
               }
        }]);
+       // Functions for when if and when the tower is broken, when the health is equal to zero, and the type states it as the player base. 
        this.broken = false;
        this.health = 10;
        this.alwaysUpdate = true;
@@ -82,7 +85,7 @@ game.PlayerBaseEntity = me.Entity.extend({
 
      }
 });
-
+// Same thing as the Player Base entity
 game.EnemyBaseEntity = me.Entity.extend({
      init: function(x, y, settings) {
        this._super(me.Entity, 'init', [x, y, {
