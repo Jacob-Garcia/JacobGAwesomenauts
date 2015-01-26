@@ -13,6 +13,9 @@ game.PlayerEntity = me.Entity.extend({
         }]);
     // Used for movement, this line sets the velocity in which the palyer moves across the map.
     this.body.setVelocity(5, 20);
+
+    me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
+    
     // These two lines add aniamtions for the Orc player from the spritesheet he is given in the data file. The numbers represent the different sprites used to imitate a walking animation.
     this.renderable.addAnimation("idle", [78]);
     this.renderable.addAnimation("walk", [117, 118, 119, 120, 121, 123, 124, 125], 80);
@@ -67,14 +70,19 @@ game.PlayerBaseEntity = me.Entity.extend({
        this.health = 10;
        this.alwaysUpdate = true;
        this.body.onCollision = this.onCollision.bind(this);
+       console.log("init");
 
        this.type = "PlayerBaseEntity";
+       this.renderable.addAnimation("idle", [0]);
+       this.renderable.addAnimation("broken", [1]);
+       this.renderable.setCurrentAnimation("idle");
 
      },
      
      update:function(delta) {
          if(this.health<=0) {
          	this.broken = true;
+         	this.renderable.setCurrentAnimation("broken");
          }
          this.body.update(delta);
 
@@ -102,14 +110,20 @@ game.EnemyBaseEntity = me.Entity.extend({
        this.health = 10;
        this.alwaysUpdate = true;
        this.body.onCollision = this.onCollision.bind(this);
-
+       console.log("init");
        this.type = "EnemyBaseEntity";
+
+       this.renderable.addAnimation("idle", [0]);
+       this.renderable.addAnimation("broken", [1]);
+       this.renderable.setCurrentAnimation("idle");
+       this.flipX(true);
 
      },
      
      update:function(delta) {
          if(this.health<=0) {
          	this.broken = true;
+         	this,renderable.setCurrentAnimation("broken");
          }
          this.body.update(delta);
 
