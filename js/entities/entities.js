@@ -13,9 +13,8 @@ game.PlayerEntity = me.Entity.extend({
         }]);
     // Used for movement, this line sets the velocity in which the palyer moves across the map.
     this.body.setVelocity(5, 20);
-
+    // Used to make the camera follow the player as he moves
     me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
-    
     // These two lines add aniamtions for the Orc player from the spritesheet he is given in the data file. The numbers represent the different sprites used to imitate a walking animation.
     this.renderable.addAnimation("idle", [78]);
     this.renderable.addAnimation("walk", [117, 118, 119, 120, 121, 123, 124, 125], 80);
@@ -71,14 +70,14 @@ game.PlayerBaseEntity = me.Entity.extend({
        this.alwaysUpdate = true;
        this.body.onCollision = this.onCollision.bind(this);
        console.log("init");
-
+       // Animations for the towers, same as the Enemy Base. Each one ("broken" and "idle") is used to state whether the tower is almost destroyed or fine.
        this.type = "PlayerBaseEntity";
        this.renderable.addAnimation("idle", [0]);
        this.renderable.addAnimation("broken", [1]);
        this.renderable.setCurrentAnimation("idle");
 
      },
-     
+     // Updating functions for when the health of the tower is zero
      update:function(delta) {
          if(this.health<=0) {
          	this.broken = true;
