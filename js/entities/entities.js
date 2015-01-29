@@ -44,11 +44,6 @@ game.PlayerEntity = me.Entity.extend ({
       } else{
       	this.renderable.setCurrentAnimation("idle");
       }        
-      this.body.update(delta);
-
-      this._super(me.Entity, "update", [delta]);
-      return true;
-      
       if(me.input.isKeyPressed("attack")) {
        	  console.log("attack1");
        	  if(!this.renderable.isCurrentAnimation("attack")){
@@ -57,6 +52,11 @@ game.PlayerEntity = me.Entity.extend ({
        	  	this.renderable.setAnimationFrame();
        	  }
        }
+
+     this.body.update(delta);
+
+      this._super(me.Entity, "update", [delta]);
+      return true;
     }
 });
 

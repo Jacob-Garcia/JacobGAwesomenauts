@@ -8,7 +8,7 @@ game.PlayScreen = me.ScreenObject.extend({
         // The levelDirector is called to load the test level.
         me.levelDirector.loadLevel("test");
         // These two lines are used to pull the Orc player entity from the entity pool in entities.js.
-        var player = me.pool.pull("player", 0, 0, {});
+        var player = me.pool.pull("player", 0, 420, {});
         me.game.world.addChild(player, 5);
         // These inputs are used to bind the arrow keys/buttons to do certain actions.
         me.input.bindKey(me.input.KEY.RIGHT, "right");
