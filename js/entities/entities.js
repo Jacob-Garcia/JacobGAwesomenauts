@@ -1,5 +1,5 @@
 // This is the code for the Orc player
-game.PlayerEntity = me.Entity.extend({
+game.PlayerEntity = me.Entity.extend ({
     init: function(x, y, settings) {
         this._super(me.Entity, 'init', [x, y, {
         	image: "player",
@@ -18,6 +18,7 @@ game.PlayerEntity = me.Entity.extend({
     // These two lines add aniamtions for the Orc player from the spritesheet he is given in the data file. The numbers represent the different sprites used to imitate a walking animation.
     this.renderable.addAnimation("idle", [78]);
     this.renderable.addAnimation("walk", [117, 118, 119, 120, 121, 123, 124, 125], 80);
+    this.renderable.addAnimation("attack", [65, 66, 67, 68, 69, 70, 71, 72], 80);
     // This action sets the current animation to "idle" when the player is NOT moving.
     this.renderable.setCurrentAnimation("idle");
     
@@ -42,18 +43,27 @@ game.PlayerEntity = me.Entity.extend({
         }
       } else{
       	this.renderable.setCurrentAnimation("idle");
-      }
-       this.body.update(delta);
+      }        
+      this.body.update(delta);
 
-       this._super(me.Entity, "update", [delta]);
-       return true;
+      this._super(me.Entity, "update", [delta]);
+      return true;
+      
+      if(me.input.isKeyPressed("attack")) {
+       	  console.log("attack1");
+       	  if(!this.renderable.isCurrentAnimation("attack")){
+       	  	console.log("attack2");
+       	  	this.renderable.setCurrentAnimation("attack");
+       	  	this.renderable.setAnimationFrame();
+       	  }
+       }
     }
 });
 
 // These two globs of text contain the data of the two towers in the game, for player and the enemy.
 game.PlayerBaseEntity = me.Entity.extend({
      init: function(x, y, settings) {
-     	// These variabls state the height and width of the sprite.
+     	// These variables state the height and width of the sprite.
        this._super(me.Entity, 'init', [x, y, {
               image: "tower",
               width: 100,
