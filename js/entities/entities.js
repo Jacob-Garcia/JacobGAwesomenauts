@@ -36,8 +36,17 @@ game.PlayerEntity = me.Entity.extend ({
        } else {
        	this.body.vel.x = 0;
        }
+         if(me.input.isKeyPressed("attack")) {
+       	  console.log("attack1");
+       	  if(!this.renderable.isCurrentAnimation("attack")){
+       	  	console.log("attack2");
+       	  	this.renderable.setCurrentAnimation("attack");
+       	  	this.renderable.setAnimationFrame();
+       	  }
+       }
+
        // These if and else statements declare when to use the "walk" and "idle" animations when the character is either moving or not.
-       if(this.body.vel.x !== 0) {
+       else if(this.body.vel.x !== 0) {
        if(!this.renderable.isCurrentAnimation("walk")) {
        	   this.renderable.setCurrentAnimation("walk");
         }
