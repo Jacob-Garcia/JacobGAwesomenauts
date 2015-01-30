@@ -33,19 +33,20 @@ game.PlayerEntity = me.Entity.extend ({
        	this.body.vel.x += this.body.accel.x * me.timer.tick;
        	this.flipX(true);
      // This else function is used if the key is NOT being pressed, in that case, the velocity is returned to zero, and no movement is involved.
+     // The else if states whether to move the character left or not
        } else if (me.input.isKeyPressed("left")) {
         this.body.vel.x -= this.body.accel.x * me.timer.tick;
         this.flipX(false);
        } else {
        	this.body.vel.x = 0;
        }
-
+      // This if statement allows jumping
         if(me.input.isKeyPressed("jump") && !this.jumping && !this.falling) {
         	this.jumping = true;
         	this.body.vel.y -= this.body.accel.y * me.timer.tick;
         }
 
-
+      // These two if statements allow the attack action to go through with the animations 
          if(me.input.isKeyPressed("attack")) {
        	  console.log("attack1");
        	  if(!this.renderable.isCurrentAnimation("attack")){
