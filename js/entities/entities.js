@@ -13,6 +13,8 @@ game.PlayerEntity = me.Entity.extend ({
         }]);
     // Used for movement, this line sets the velocity in which the palyer moves across the map.
     this.body.setVelocity(5, 20);
+    // Keeps track of which direction your player goes
+    this.facing = "right";
     // Used to make the camera follow the player as he moves
     me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
     // These two lines add aniamtions for the Orc player from the spritesheet he is given in the data file. The numbers represent the different sprites used to imitate a walking animation.
@@ -31,16 +33,18 @@ game.PlayerEntity = me.Entity.extend ({
         //setVelocity() and multiplying it by me.timer.tick.
         //me.timer.tick makes the movement smooth
        	this.body.vel.x += this.body.accel.x * me.timer.tick;
+       	this.facing = "right";
        	this.flipX(true);
      // This else function is used if the key is NOT being pressed, in that case, the velocity is returned to zero, and no movement is involved.
      // The else if states whether to move the character left or not
        } else if (me.input.isKeyPressed("left")) {
         this.body.vel.x -= this.body.accel.x * me.timer.tick;
+        this.facing = "left";
         this.flipX(false);
        } else {
        	this.body.vel.x = 0;
        }
-      // This if statement allows jumping
+      // This if statement allows jumping and falling, albeit it being too floaty right now
         if(me.input.isKeyPressed("jump") && !this.jumping && !this.falling) {
         	this.jumping = true;
         	this.body.vel.y -= this.body.accel.y * me.timer.tick;
@@ -72,11 +76,24 @@ game.PlayerEntity = me.Entity.extend ({
        	  	this.renderable.setAnimationFrame();
        	  }
        }
-
+     me.collision.check(this, true, this.collideHandler.bind(this), true);
      this.body.update(delta);
+
 
       this._super(me.Entity, "update", [delta]);
       return true;
+    },
+
+    collideHandler: function(response) {
+    	if(response.b.type==='EnemyBaseEntity') {
+    		var ydif = this.pos.y - response.b.pos.y;
+    		var xdif = this.pos.x - response.b.pos.x;
+
+    		if(xdif>-35 && this.facing==='right') {
+    			this.body.vel.x = 0;
+    			this.pos.x = this.pos.x -1;
+    		}
+    	}
     }
 });
 
