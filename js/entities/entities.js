@@ -10,7 +10,7 @@ game.PlayerEntity = me.Entity.extend ({
         	getShape: function() {
         		return(new me.Rect(0, 0, 64, 64)).toPolygon();
         	}
-        }]); 
+        }]);
     // Used for movement, this line sets the velocity in which the palyer moves across the map.
     this.body.setVelocity(5, 20);
     // Keeps track of which direction your player goes
