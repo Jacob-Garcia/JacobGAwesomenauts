@@ -89,9 +89,13 @@ game.PlayerEntity = me.Entity.extend ({
     		var ydif = this.pos.y - response.b.pos.y;
     		var xdif = this.pos.x - response.b.pos.x;
 
-    		if(xdif>-35 && this.facing==='right') {
+    		if(xdif>-35 && this.facing==='right' && (xdif<0)) {
     			this.body.vel.x = 0;
     			this.pos.x = this.pos.x -1;
+        }else if(xdif<70 $$ this.facing==='left' && xdif>0) {
+                this.body.vel.x = 0;
+                this.pos.x = this.pos.x +1;
+          }
     		}
     	}
     }
