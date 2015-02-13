@@ -45,37 +45,28 @@ game.PlayerEntity = me.Entity.extend ({
        	this.body.vel.x = 0;
        }
       // This if statement allows jumping and falling, albeit it being too floaty right now
-        if(me.input.isKeyPressed("jump") && !this.jumping && !this.falling) {
+        if(me.input.isKeyPressed("space") && !this.jumping && !this.falling) {
         	this.jumping = true;
         	this.body.vel.y -= this.body.accel.y * me.timer.tick;
         }
 
-      // These two if statements allow the attack action to go through with the animations 
-         if(me.input.isKeyPressed("attack")) {
-       	  console.log("attack1");
-       	  if(!this.renderable.isCurrentAnimation("attack")){
-       	  	console.log("attack2");
-       	  	this.renderable.setCurrentAnimation("attack");
-       	  	this.renderable.setAnimationFrame();
-       	  }
-       }
 
+        if(me.input.isKeyPressed("attack")) {
+          if(!this.renderable.isCurrentAnimation("attack"));
+          this.renderable.setCurrentAnimation("attack", "idle");
+          this.renderable.setAnimationFrame();
+        }
+    }
        // These if and else statements declare when to use the "walk" and "idle" animations when the character is either moving or not.
-       else if(this.body.vel.x !== 0) {
+       else if(this.body.vel.x !==0 && !this.renderable.isCurrentAnimation("attack")) {
        if(!this.renderable.isCurrentAnimation("walk")) {
        	   this.renderable.setCurrentAnimation("walk");
-        }
-      } else{
+          }
+      } else if(!this.renderable.isCurrentAnimation("attack")) {
       	this.renderable.setCurrentAnimation("idle");
       }        
-      if(me.input.isKeyPressed("attack")) {
-       	  console.log("attack1");
-       	  if(!this.renderable.isCurrentAnimation("attack")){
-       	  	console.log("attack2");
-       	  	this.renderable.setCurrentAnimation("attack");
-       	  	this.renderable.setAnimationFrame();
-       	  }
-       }
+
+
      me.collision.check(this, true, this.collideHandler.bind(this), true);
      this.body.update(delta);
 
@@ -101,6 +92,10 @@ game.PlayerEntity = me.Entity.extend ({
           else if(xdif<70 && this.facing==='left' && (xdif>0) {
                 this.body.vel.x = 0;
                 this.pos.x = this.pos.x +1;
+          }
+
+          if (this.renderable.isCurrentAnimation("attack")) {
+            response.b.loseHealth();
           }
     		}
     	}
@@ -179,7 +174,7 @@ game.EnemyBaseEntity = me.Entity.extend({
      update:function(delta) {
          if(this.health<=0) {
          	this.broken = true;
-         	this,renderable.setCurrentAnimation("broken");
+         	this.renderable.setCurrentAnimation("broken");
          }
          this.body.update(delta);
 
@@ -188,5 +183,39 @@ game.EnemyBaseEntity = me.Entity.extend({
      },
      onCollision: function() {
      	
+     },
+
+     loseHealth: function() {
+      this.health--;
      }
+});
+
+game.EnemyCreep = me.Entity.extend({
+    init: function(x, y, settings) {
+      this._super(me.Entity, 'init', [x, y, {
+             image: "creep1",
+             width: 32,
+             height: 64,
+             spritewidth: "32", 
+             spriteheight: "64",
+             getShape: function() {
+             return (new.me.Rect)
+             } 
+      }]);
+      this.health = 10;
+      this.alwaysUpdate = true;
+
+      this.setVelocity(3, 20);
+
+      this.type = "EnemyCreep";
+
+      this.renderable.addAnimation("walk", [3, 4, 5], 80);
+      this.renderable.setCurrentAnimation("walk");
+  
+    },
+
+    update: Function(){
+
+    }
+ 
 });
