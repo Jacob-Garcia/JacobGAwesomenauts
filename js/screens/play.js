@@ -10,6 +10,10 @@ game.PlayScreen = me.ScreenObject.extend({
         // These two lines are used to pull the Orc player entity from the entity pool in entities.js.
         var player = me.pool.pull("player", 0, 496, {});
         me.game.world.addChild(player, 5);
+
+        var gamemanager = me.pool.pull("GameManager", 0, 0, {});
+        me.game.world.addChild(gamemanager, 0);
+        
         // These inputs are used to bind the arrow keys/buttons to do certain actions.
         me.input.bindKey(me.input.KEY.RIGHT, "right");
         me.input.bindKey(me.input.KEY.LEFT, "left");
