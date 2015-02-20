@@ -48,7 +48,7 @@ game.PlayerEntity = me.Entity.extend ({
         if(me.input.isKeyPressed("space") && !this.jumping && !this.falling) {
         	this.jumping = true;
         	this.body.vel.y -= this.body.accel.y * me.timer.tick;
-        }
+        };
 
 
         if(me.input.isKeyPressed("attack")) {
@@ -66,7 +66,7 @@ game.PlayerEntity = me.Entity.extend ({
       	this.renderable.setCurrentAnimation("idle");
       }        
 
-
+    }
      me.collision.check(this, true, this.collideHandler.bind(this), true);
      this.body.update(delta);
 
@@ -123,7 +123,7 @@ game.PlayerBaseEntity = me.Entity.extend({
        this.body.onCollision = this.onCollision.bind(this);
        console.log("init");
        // Animations for the towers, same as the Enemy Base. Each one ("broken" and "idle") is used to state whether the tower is almost destroyed or fine.
-       this.type = "PlayerBaseEntity";
+       this.type = "PlayerBase";
        this.renderable.addAnimation("idle", [0]);
        this.renderable.addAnimation("broken", [1]);
        this.renderable.setCurrentAnimation("idle");
@@ -139,6 +139,10 @@ game.PlayerBaseEntity = me.Entity.extend({
 
          this._super(me.Entity, "update", [delta]);
          return true;
+     },
+
+     loseHealth: function(damage) {
+         this.health = this.health - damage;
      },
      onCollision: function() {
 
@@ -199,12 +203,15 @@ game.EnemyCreep = me.Entity.extend({
              spritewidth: "32", 
              spriteheight: "64",
              getShape: function() {
-             return (new.me.Rect)
+             return (new me.Rect(0,0,32,64)).toPolygon();
              } 
       }]);
       this.health = 10;
       this.alwaysUpdate = true;
-
+      this.attacking = false;
+      this.lastAttacking = new Date().getTime();
+      this.lastHit = new Date().getTime();
+      this.now = new Date().getTime();
       this.body.setVelocity(3, 20);
 
       this.type = "EnemyCreep";
@@ -215,29 +222,49 @@ game.EnemyCreep = me.Entity.extend({
     },
 
     update: function(delta){
-              this.vel.x -= this.accel.x * me.timer.tick;
+              this.now = new Date().getTime();
+              this.body.vel.x -= this.body.accel.x * me.timer.tick;
+              me.collision.check(this, true, this.collideHandler.bind(this), true);
               this.body.update(delta);
               this._super(me.Entity, "update", [delta]);
               return true;
+    },
+
+    collideHandler: function(response) {
+         if (response.b.type=== 'PlayerBase') {
+            this.attacking=true;
+            this.lastAttacking=this.now;
+            this.body.vel.x = 0;
+            this.pos.x = this.pos.x + 1;
+            if((this.now-this.lastHit >= 1000)) {
+              this.lastHit = this.now;
+              response.b.loseHealth(1);
+            }
+         } else if (response.b.type==='PlayerEntity') {
+
+         }
     }
 });
 
 game.GameManager = Object.extend({
   init: function(x, y, settings) {
-       this.now = new Date().getTime;
-       this.lastCreep = new Date().getTime;
+       this.now = new Date().getTime();
+       this.lastCreep = new Date().getTime();
 
        this.alwaysUpdate = true;
+       console.log("init game manager");
   },
 
   update: function() {
      this.now = new Date().getTime();
 
 
-     if (Math.round(this.new/1000 ===0 && (this.now - this.lastCreep >= 1000)) {
+     if (Math.round(this.now/1000) % 10 === 0 && (this.now - this.lastCreep >= 1000)) {
+        console.log("creating creep");
         this.lastCreep = this.now;
         var creep = me.pool.pull("EnemyCreep", 1000, 0, {});
         me.game.world.addChild(creep, 5);
      }
+     return true;
   }
 });
